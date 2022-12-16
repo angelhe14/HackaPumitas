@@ -1,0 +1,22 @@
+#root {
+  background: rgb(145,133,185);
+  background: radial-gradient(circle, rgba(145,133,185,1) 23%, rgba(98,152,215,1) 74%);
+  max-width: auto;
+  min-height: 100vh;
+  padding-top: 0;
+  display: flex;
+  flex-direction: column;
+  box-sizing: content-box;
+}
+
+html{
+  background: rgb(145,133,185);
+  background: radial-gradient(circle, rgba(145,133,185,1) 23%, rgba(98,152,215,1) 74%);
+}
+
+main {
+  max-width: auto;
+  flex: 1;
+  padding: 0 0 60px;
+  position: relative;
+}
