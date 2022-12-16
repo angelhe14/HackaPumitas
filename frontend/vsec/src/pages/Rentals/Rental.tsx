@@ -10,10 +10,9 @@ import Badge from '@mui/material/Badge';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import Pagination from '@mui/material/Pagination';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Card from '@mui/material/Card';
-import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
 import Grid from '@mui/material/Grid';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -27,32 +26,30 @@ import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import demoData from '../../assets/demoFiles/demo.json'
+
 const theme = createTheme();
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 const images = [
   {
-    label: 'San Francisco – Oakland Bay Bridge, United States',
+    label: 'Image 1',
     imgPath:
-      'https://images.unsplash.com/photo-1537944434965-cf4679d1a598?auto=format&fit=crop&w=400&h=250&q=60',
+    "https://a0.muscache.com/im/pictures/miso/Hosting-7602468/original/775720cd-cee0-44a3-aec1-6e135195ef57.jpeg?im_w=960",
   },
   {
-    label: 'Bird',
+    label: 'Image 2',
     imgPath:
-      'https://images.unsplash.com/photo-1538032746644-0212e812a9e7?auto=format&fit=crop&w=400&h=250&q=60',
+    "https://a0.muscache.com/im/pictures/miso/Hosting-7602468/original/06d9c082-9475-466e-bc7f-735618c32659.jpeg?im_w=480",
   },
   {
-    label: 'Bali, Indonesia',
+    label: 'Image 3',
     imgPath:
-      'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=400&h=250',
-  },
-  {
-    label: 'Goč, Serbia',
-    imgPath:
-      'https://images.unsplash.com/photo-1512341689857-198e7e2f3ca8?auto=format&fit=crop&w=400&h=250&q=60',
-  },
+    "https://a0.muscache.com/im/pictures/380b3d77-1a9e-423b-8f64-8189f124dccf.jpg?im_w=480",
+  }
 ];
+
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
@@ -70,6 +67,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 interface TabPanelProps {
     children?: React.ReactNode;
+    dir?: string;
     index: number;
     value: number;
 }
@@ -101,7 +99,7 @@ function a11yProps(index: number) {
     };
 }
 
-export default function Rental() {
+export default function NewRental() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -135,6 +133,10 @@ export default function Rental() {
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+
+  const handleChangeIndex = (index: number) => {
+    setValue(index);
   };
 
   const theme = useTheme();
@@ -207,153 +209,153 @@ export default function Rental() {
       </AppBar>
   
       <main>
-        <Grid 
-            container
-            spacing={0}
-            direction="column"
-            alignItems="center"
-            justifyContent="center"
-        >
-            <Grid item xs={12}>
-                <Card sx={{ 
-                    width: 545,
-                    mt: "15px",
-                    mb: "15px"
-                }}>
-                    <Box sx={{ maxWidth: 400, flexGrow: 1 }}>
-                        <Paper
-                            square
-                            elevation={0}
-                            sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            height: 50,
-                            pl: 2,
-                            bgcolor: 'background.default',
-                            }}
+        <Grid container  spacing={1}>
+            <Grid xs={6}>
+                <Box sx={{ 
+                    maxWidth: 700, 
+                    flexGrow: 1,
+                    padding: "40px 65px 10px 20px",
+                    }}
+                    justifyContent="center"
+                    alignItems="center"
+                >
+                    <Paper
+                        square
+                        elevation={0}
+                        sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        height: 50,
+                        pl: 2,
+                        bgcolor: 'background.default',
+                        }}
+                    >
+                        <Typography>{images[activeStep].label}</Typography>
+                    </Paper>
+                    <AutoPlaySwipeableViews
+                        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                        index={activeStep}
+                        onChangeIndex={handleStepChange}
+                        enableMouseEvents
+                    >
+                        {images.map((step, index) => (
+                        <div key={step.label}>
+                            {Math.abs(activeStep - index) <= 2 ? (
+                            <Box
+                                component="img"
+                                sx={{
+                                height: 455,
+                                display: 'block',
+                                maxWidth: 700,
+                                overflow: 'hidden',
+                                width: '100%',
+                                }}
+                                src={step.imgPath}
+                                alt={step.label}
+                            />
+                            ) : null}
+                        </div>
+                        ))}
+                    </AutoPlaySwipeableViews>
+                    <MobileStepper
+                        steps={maxSteps}
+                        position="static"
+                        activeStep={activeStep}
+                        nextButton={
+                        <Button
+                            size="small"
+                            onClick={handleNext}
+                            disabled={activeStep === maxSteps - 1}
                         >
-                            <Typography>{images[activeStep].label}</Typography>
-                        </Paper>
-                        <AutoPlaySwipeableViews
-                            axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                            index={activeStep}
-                            onChangeIndex={handleStepChange}
-                            enableMouseEvents
-                        >
-                            {images.map((step, index) => (
-                            <div key={step.label}>
-                                {Math.abs(activeStep - index) <= 2 ? (
-                                <Box
-                                    component="img"
-                                    sx={{
-                                    height: 255,
-                                    display: 'block',
-                                    maxWidth: 400,
-                                    overflow: 'hidden',
-                                    width: '100%',
-                                    }}
-                                    src={step.imgPath}
-                                    alt={step.label}
-                                />
-                                ) : null}
-                            </div>
-                            ))}
-                        </AutoPlaySwipeableViews>
-                        <MobileStepper
-                            steps={maxSteps}
-                            position="static"
-                            activeStep={activeStep}
-                            nextButton={
-                            <Button
-                                size="small"
-                                onClick={handleNext}
-                                disabled={activeStep === maxSteps - 1}
-                            >
-                                Next
-                                {theme.direction === 'rtl' ? (
-                                <KeyboardArrowLeft />
-                                ) : (
-                                <KeyboardArrowRight />
-                                )}
-                            </Button>
-                            }
-                            backButton={
-                            <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-                                {theme.direction === 'rtl' ? (
-                                <KeyboardArrowRight />
-                                ) : (
-                                <KeyboardArrowLeft />
-                                )}
-                                Back
-                            </Button>
-                            }
-                        />
-                    </Box>
-                </Card>
-            </Grid>
-            <Grid item xs={8}>
-                <Card>
-                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab label="Item One" {...a11yProps(0)} />
-                        <Tab label="Item Two" {...a11yProps(1)} />
-                        <Tab label="Item Three" {...a11yProps(2)} />
-                    </Tabs>
-                </Card>
-                <TabPanel value={value} index={0}>
-                    <Card sx={{ 
-                        width: 250,
-                        mt: "15px",
-                        mb: "15px"
-                    }}>
-                        <CardMedia
-                            component="img"
-                            height="240"
-                            image="https://www.hogarmania.com/archivos/202109/animales-felices-portada-668x400x80xX-1.jpg"
-                            alt="green iguana"
-                        />
-                    </Card>
-                </TabPanel>
-                <TabPanel value={value} index={1}>
-                <Card sx={{ 
-                        width: 250,
-                        mt: "15px",
-                        mb: "15px"
-                    }}>
-                        <CardMedia
-                            component="img"
-                            height="240"
-                            image="https://arbolabc.nyc3.cdn.digitaloceanspaces.com/Science/animals/articles/animales-domesticos/dog.jpg"
-                            alt="green iguana"
-                        />
-                    </Card>
-                </TabPanel>
-                <TabPanel value={value} index={2}>
-                    <Card sx={{ 
-                        width: 250,
-                        mt: "15px",
-                        mb: "15px"
-                    }}>
-                        <CardMedia
-                            component="img"
-                            height="240"
-                            image="https://www.hogarmania.com/archivos/202109/animales-felices-portada-668x400x80xX-1.jpg"
-                            alt="green iguana"
-                        />
-                    </Card>
-                </TabPanel>
-            </Grid>
-            <Grid item xs={4}>
-                <Card sx={{ 
-                    width: 250,
-                    mt: "15px",
-                    mb: "15px"
-                }}>
-                    <CardMedia
-                        component="img"
-                        height="240"
-                        image="https://www.hogarmania.com/archivos/202109/animales-felices-portada-668x400x80xX-1.jpg"
-                        alt="green iguana"
+                            Next
+                            {theme.direction === 'rtl' ? (
+                            <KeyboardArrowLeft />
+                            ) : (
+                            <KeyboardArrowRight />
+                            )}
+                        </Button>
+                        }
+                        backButton={
+                        <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+                            {theme.direction === 'rtl' ? (
+                            <KeyboardArrowRight />
+                            ) : (
+                            <KeyboardArrowLeft />
+                            )}
+                            Back
+                        </Button>
+                        }
                     />
+                </Box>
+            </Grid>
+            <Grid xs={3}>
+                <Box sx={{ 
+                    bgcolor: 'background.paper', 
+                    width: 475,
+                    margin: "40px 65px 10px 0px"
+                }}>
+                    <AppBar position="static">
+                        <Tabs
+                            value={value}
+                            onChange={handleChange}
+                            indicatorColor="secondary"
+                            textColor="inherit"
+                            variant="fullWidth"
+                            aria-label="full width tabs example"
+                        >
+                        <Tab label="Overview" {...a11yProps(0)} />
+                        <Tab label="Available Dates" {...a11yProps(1)} />
+                        <Tab label="Reviews" {...a11yProps(2)} />
+                        <Tab label="Your Host" {...a11yProps(3)} />
+                        </Tabs>
+                    </AppBar>
+                    <SwipeableViews
+                        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                        index={value}
+                        onChangeIndex={handleChangeIndex}
+                    >
+                        <TabPanel value={value} index={0} dir={theme.direction}>
+                            <Card sx={{ 
+                                width: 300,
+                            }}>
+                                <CardContent>
+                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        </TabPanel>
+                        <TabPanel value={value} index={1} dir={theme.direction}>
+                            Item Two
+                        </TabPanel>
+                        <TabPanel value={value} index={2} dir={theme.direction}>
+                            Item Three
+                        </TabPanel>
+                        <TabPanel value={value} index={3} dir={theme.direction}>
+                            Item Four
+                        </TabPanel>
+                    </SwipeableViews>
+                </Box>
+            </Grid>
+            <Grid xs={1}>
+                <Card sx={{ 
+                    width: 200,
+                    margin: "30px 30px 30px 150px",
+                    height: "100%"
+                }}>
+                    <CardContent>
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                        Total
+                        </Typography>
+                        <Button
+                          type="submit"
+                          fullWidth
+                          variant="contained"
+                          sx={{ mt: 3, mb: 2 }}
+                          href="/Payment"
+                        >
+                          Go to Payment
+                        </Button>
+                    </CardContent>
                 </Card>
             </Grid>
         </Grid>

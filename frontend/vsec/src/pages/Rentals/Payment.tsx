@@ -3,18 +3,16 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import Checkbox from '@mui/material/Checkbox';
 import LinkMUI from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import PaymentIcon from '@mui/icons-material/Payment';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import { HashRouter as Router, Link } from 'react-router-dom';
-import Home from './Home'
 
 function Copyright(props: any) {
   return (
@@ -31,7 +29,7 @@ function Copyright(props: any) {
 
 const theme = createTheme();
 
-export default function SignIn() {
+export default function Payment() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -54,18 +52,18 @@ export default function SignIn() {
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
+            <PaymentIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Payment
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
+              id="user"
+              label="Username"
               name="email"
               autoComplete="email"
               autoFocus
@@ -74,37 +72,39 @@ export default function SignIn() {
               margin="normal"
               required
               fullWidth
-              name="password"
-              label="Password"
-              type="password"
+              name="number"
+              label="Phone Number"
               id="password"
               autoComplete="current-password"
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="wallet"
+              label="Wallet ID"
+              type="password"
+              id="walletID"
+              autoComplete="current-password"
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
+              startIcon={<MonetizationOnIcon/>}
               sx={{ mt: 3, mb: 2 }}
-              href="/Home"
             >
-              Sign In
+              Autofill ID
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <LinkMUI href="#" variant="body2">
-                  Forgot password?
-                </LinkMUI>
-              </Grid>
-              <Grid item>
-                <LinkMUI href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </LinkMUI>
-              </Grid>
-            </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              href="/Checkout"
+            >
+              Pay
+            </Button>
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />

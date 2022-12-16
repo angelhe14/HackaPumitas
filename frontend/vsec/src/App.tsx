@@ -1,6 +1,7 @@
 import { useApi, useAccount } from '@gear-js/react-hooks';
+import { Routing } from 'pages';
+import { ApiLoader } from 'components'
 import { withProviders } from 'hocs';
-import FirstPage from './pages/Rentals/Rental'
 import 'App.css';
 
 function Component() {
@@ -10,9 +11,7 @@ function Component() {
   const isAppReady = isApiReady && isAccountReady;
 
   return (
-      <main>
-        <FirstPage/>
-      </main>
+    <main>{isAppReady ? <Routing /> : <ApiLoader />}</main>
   );
 }
 

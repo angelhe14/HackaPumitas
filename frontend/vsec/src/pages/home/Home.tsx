@@ -5,7 +5,6 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
@@ -17,12 +16,39 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Grid from '@mui/material/Grid'; // Grid version 1
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 
-import Places from './Places'
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Collapse from '@mui/material/Collapse';
+import Avatar from '@mui/material/Avatar';
+import { red } from '@mui/material/colors';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+
 import YourTrips from './YourTrips'
 import YourPlaces from './YourPlaces'
 
+import demoData from '../../assets/demoFiles/demo.json'
+
 const theme = createTheme();
+
+interface ExpandMoreProps extends IconButtonProps {
+  expand: boolean;
+}
+
+const ExpandMore = styled((props: ExpandMoreProps) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  marginLeft: 'auto',
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
@@ -39,6 +65,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Home() {
+  const [expanded, setExpanded] = React.useState(false);
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+  
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -47,9 +79,6 @@ export default function Home() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
-
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -93,21 +122,92 @@ export default function Home() {
     justifyContent: 'center',
   }));
 
-  const names = ['James', 'Paul', 'John', 'George', 'Ringo'];
+  type User = {
+    id: number;
+    email: string;
+    first_name: string;
+  };
+  
+  type GetUsersResponse = {
+    data: User[];
+  };
 
-  function getPlaces(names: any){
-    let content = [];
+  async function getUsers() {
+    try {
+      // 👇️ const response: Response
+      const response = await fetch('http://192.168.137.15:8000', {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Error! status: ${response.status}`);
+      }
+  
+      // 👇️ const result: GetUsersResponse
+      const result = (await response.json()) as GetUsersResponse;
+  
+      return JSON.parse(JSON.stringify(result));
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log('error message: ', error.message);
+        return error.message;
+      } else {
+        console.log('unexpected error: ', error);
+        return 'An unexpected error occurred';
+      }
+    }
+  }
 
-    for (let item of names){
+  const generalData = getUsers();
+
+  function getPlaces(gendata: any){
+    let content = [<div></div>]
+
+    for (let item in gendata.sites){
       content.push(
         <ListItem>
-          <Places/>
+          <Card sx={{ 
+            maxHeight: 350
+            }}>
+            <CardHeader
+              avatar={
+                //Inicial del arrendador
+                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                  {gendata.sites[item].dueno.substr(0,1)}
+                </Avatar>
+              }
+              action={
+                <IconButton aria-label="settings" href="/Rental">
+                  <ArrowForwardIcon/>
+                </IconButton>
+              }
+              title = {gendata.sites[item].titulo} //Titulo Vivienda
+              subheader= {gendata.sites[item].precio} //Precio por noche
+            />
+            <CardMedia
+              component="img"
+              height="200"
+              image= {gendata.sites[item].imagenes.img1}
+              alt= {gendata.sites[item].municipio}
+            />
+            <CardContent>
+              <Typography variant="body2" color="text.secondary">
+                {gendata.sites[item].valoraciones.v1}
+              </Typography>
+            </CardContent>
+            <CardActions disableSpacing>
+            </CardActions>
+          </Card>
         </ListItem>
       );
     }
-    
-    return content;
+
+    return content
   };
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -192,7 +292,7 @@ export default function Home() {
                   '& ul': { padding: 0 },
                 }}
               >
-                {getPlaces(names)}
+                {getPlaces(demoData)}
               </List>
             </Box>
           </Grid>

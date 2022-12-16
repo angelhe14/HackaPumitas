@@ -6,37 +6,59 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-  >
-    •
-  </Box>
-);
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Checkbox from '@mui/material/Checkbox';
+import Avatar from '@mui/material/Avatar';
+
+import demoData from '../../assets/demoFiles/demo.json'
+
 
 export default function BasicCard() {
+
+  const [checked, setChecked] = React.useState([1]);
+
+  const handleToggle = (value: number) => () => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setChecked(newChecked);
+  };
+
   return (
     <Card sx={{ maxWidth: 375 }}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Word of the Day
+          Your last Trips
         </Typography>
-        <Typography variant="h5" component="div">
-          be{bull}nev{bull}o{bull}lent
-        </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          adjective
-        </Typography>
-        <Typography variant="body2">
-          well meaning and kindly.
-          <br />
-          {'"a benevolent smile"'}
-        </Typography>
+        <List dense sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+          <ListItem>
+            <ListItemAvatar>
+              <Avatar
+                src={demoData.historial.hst0.img1}
+              />
+            </ListItemAvatar>
+            <ListItemText>{demoData.historial.hst0.fecha}</ListItemText>
+          </ListItem>
+          <ListItem>
+            <ListItemAvatar>
+              <Avatar
+                src={demoData.historial.hst1.img3}
+              />
+            </ListItemAvatar>
+            <ListItemText>{demoData.historial.hst1.fecha}</ListItemText>
+          </ListItem>
+        </List>
       </CardContent>
-      <CardActions>
-        <Button size="small">Learn More</Button>
-      </CardActions>
     </Card>
   );
 }
