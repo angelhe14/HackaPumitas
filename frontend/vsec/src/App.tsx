@@ -1,6 +1,6 @@
 import { useApi, useAccount } from '@gear-js/react-hooks';
 import { withProviders } from 'hocs';
-import FirstPage from '../src/pages/home/Home'
+import FirstPage from './pages/Rentals/Rental'
 import 'App.css';
 
 function Component() {
@@ -11,7 +11,7 @@ function Component() {
 
   return (
       <main>
-        <FirstPage></FirstPage>
+        <FirstPage/>
       </main>
   );
 }
